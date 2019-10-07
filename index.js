@@ -19,11 +19,11 @@ $(document).ready(function() {
     
     username = localStorage.getItem("infosUsername");
     if (!username) {
-        username = "";
+        username = "xy";
     }
     passwort = localStorage.getItem("infosPasswort");
     if (!passwort) {
-        passwort = "";
+        passwort = "xy";
     }
 
     var leseUrl;
@@ -43,8 +43,8 @@ $(document).ready(function() {
     $("#selectDatei").change(function name() {
         speichen("sichern-datum");
         if ($( "#selectDatei" ).val() == "abmelden") {
-            username = "";
-            passwort = "";
+            username = "xy";
+            passwort = "xy";
         } else {
             datei = "&datei=" + $( "#selectDatei" ).val()
         }
