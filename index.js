@@ -117,7 +117,7 @@ $(document).ready(function() {
                 });
             }
         } else {
-            aktuelleDaten = daten.beziehungen.filter(b => !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
+            aktuelleDaten = daten.beziehungen.filter(b => editiermodus || !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
             if ($("#inpSuche").val() != "") {
                 $("#inpSuche").val().split(" ").forEach(wort => {
                     wort = wort.toUpperCase();
@@ -134,21 +134,22 @@ $(document).ready(function() {
             anwenden();
         });        
     
-        var store = auswahlDaten;
+        //var store = auswahlDaten;
+        auswahlDaten = daten.beziehungen.filter(b => !(b.oberID && b.bezeichnung)).slice(0).sort( vergleichTitel );
 
         selGruppe = $("#selectGruppe").val();
         if (selGruppe != "alleGruppen") {
             aktuelleDaten = aktuelleDaten.filter(b => b.gruppe == selGruppe);
-            store = auswahlDaten.filter(b => b.inaktiv == selGruppe);
+            auswahlDaten = auswahlDaten.filter(b => b.gruppe == selGruppe);
         }
 
         if ($("#selectAktiveInaktive").val() == "aktive") {
             aktuelleDaten = aktuelleDaten.filter(b => b.inaktiv == false);
-            store = auswahlDaten.filter(b => b.inaktiv == false);
+            auswahlDaten = auswahlDaten.filter(b => b.inaktiv == false);
         }    
         if ($("#selectAktiveInaktive").val() == "inaktive") {
             aktuelleDaten = aktuelleDaten.filter(b => b.inaktiv == true);
-            store = auswahlDaten.filter(b => b.inaktiv == true);
+            auswahlDaten = auswahlDaten.filter(b => b.inaktiv == true);
         }    
 
         Globalize.locale("de");
@@ -160,7 +161,7 @@ $(document).ready(function() {
 
         var objektAuswahl = {
             dataSource: {
-                store: store /*,
+                store: auswahlDaten /*,
                 sort: "titel" */
             },
             displayExpr: "titel",
@@ -260,7 +261,7 @@ $(document).ready(function() {
                 if (e.data.bezeichnung) {
                     e.data.bezeichnung = e.data.bezeichnung.trim();
                 }
-                gefunden = e.data.bezeichnung && daten.beziehungen.find(b => b.bezeichnung == e.data.bezeichnung);
+                gefunden = e.data.bezeichnung && daten.beziehungen.find(b => b.bezeichnung == e.data.bezeichnung && b.gruppe == selGruppe);
                 if (gefunden) {
                     gefunden.inaktiv = false;
                     gefunden.updaten = true;
@@ -368,9 +369,21 @@ $(document).ready(function() {
             url: leseUrl + datei,
             dataType: "json",
             success: function( speicherDaten, status, xhr ) {
-                /*speicherDaten.beziehungen.forEach(element => {
-                    element.gruppe = "Reini-privat";
-                });*/
+
+                aktuelleDaten.forEach(element => {
+                    if (element.bezeichnung == "2019-10") {
+                        alert(1);
+                    }
+                    //element.gruppe = "Reini-privat";
+                    var elem = daten.beziehungen.find(bo => bo.unterID == element.ID)
+                    if (elem && elem.gruppe != element.gruppe) {
+                        elem.gruppe = element.gruppe;
+                    }
+                    var elem = daten.beziehungen.find(bo => bo.oberID == element.ID)
+                    if (elem && elem.gruppe != element.gruppe) {
+                        elem.gruppe = element.gruppe;
+                    }
+                });
 
                 daten.beziehungen.forEach(element => {
                     element.titel = null;
@@ -447,7 +460,7 @@ $(document).ready(function() {
                     b.titel = titelSetzen(b);
                 });
         
-                auswahlDaten = daten.beziehungen.filter(b => !(b.oberID && b.bezeichnung)).slice(0).sort( vergleichTitel );
+                //auswahlDaten = daten.beziehungen.filter(b => !(b.oberID && b.bezeichnung)).slice(0).sort( vergleichTitel );
         
                 var option = '<option></option>';
                 option += '<option value=abmelden>Abmelden</option>';
@@ -461,6 +474,7 @@ $(document).ready(function() {
                     option += '<option value="'+ gruppe + '">' + gruppe + '</option>';
                 });
                 $('#selectGruppe').append(option);
+                $('#selectGruppe').val(daten.gruppen[0]);
         
                 filterID = 0;
     
