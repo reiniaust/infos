@@ -3,17 +3,7 @@
 	
 	$ordner = "/var/www/vhosts/reinhard-austermeier.de/httpdocs/~upload/";
 
-	
-	$benutzer = array(
-		"reini" => array(
-			"passwort" => "Sces04ok!",
-			"gruppen" => array(
-				"Reini-privat",
-				"sd-software",
-				"Schützenvorstand"
-			)
-		)
-	);
+	include "benutzer.php";	
 
 	if ($_GET["aktion"] == "lesen") {
 		$user = $benutzer[$_GET["username"]];
