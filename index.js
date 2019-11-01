@@ -117,7 +117,8 @@ $(document).ready(function() {
                 });
             }
         } else {
-            aktuelleDaten = daten.beziehungen.filter(b => editiermodus || !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
+            //aktuelleDaten = daten.beziehungen.filter(b => editiermodus || !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
+            aktuelleDaten = daten.beziehungen.filter(b => !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
             if ($("#inpSuche").val() != "") {
                 $("#inpSuche").val().split(" ").forEach(wort => {
                     wort = wort.toUpperCase();
@@ -140,7 +141,7 @@ $(document).ready(function() {
         selGruppe = $("#selectGruppe").val();
         if (selGruppe != "alleGruppen") {
             aktuelleDaten = aktuelleDaten.filter(b => b.gruppe == selGruppe);
-            auswahlDaten = auswahlDaten.filter(b => b.gruppe == selGruppe);
+            //auswahlDaten = auswahlDaten.filter(b => b.gruppe == selGruppe);
         }
 
         if ($("#selectAktiveInaktive").val() == "aktive") {
