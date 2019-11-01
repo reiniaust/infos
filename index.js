@@ -70,7 +70,7 @@ $(document).ready(function() {
 
         daten.beziehungen.forEach(b => {
             b.titel = titelSetzen(b);
-            if (daten.beziehungen.filter(b2 => b2.oberID == b.unterID).length > 0) {
+            if (b.unterID && daten.beziehungen.filter(b2 => b2.oberID == b.unterID).length > 0) {
                 b.plus = "+";
             } else {
                 b.plus = "";
@@ -370,22 +370,37 @@ $(document).ready(function() {
             dataType: "json",
             success: function( speicherDaten, status, xhr ) {
 
+				/*
                 aktuelleDaten.forEach(element => {
-                    if (element.bezeichnung == "2019-10") {
-                        alert(1);
-                    }
-                    //element.gruppe = "Reini-privat";
-                    var elem = daten.beziehungen.find(bo => bo.unterID == element.ID)
-                    if (elem && elem.gruppe != element.gruppe) {
-                        elem.gruppe = element.gruppe;
-                    }
-                    var elem = daten.beziehungen.find(bo => bo.oberID == element.ID)
-                    if (elem && elem.gruppe != element.gruppe) {
-                        elem.gruppe = element.gruppe;
-                    }
+                    reo(element);
                 });
+                function reo(element) {
+                    if (element.oberID) {
+                        var elem = daten.beziehungen.find(b => b.ID == element.oberID)
+                        if (elem) {
+                            elem.gruppe = element.gruppe;
+                            elem.updaten = true;
+                            reo(elem);
+                        }
+                    }
+                    if (element.unterID) {
+                        var elem = daten.beziehungen.find(b => b.ID == element.unterID)
+                        if (elem) {
+                            elem.gruppe = element.gruppe;
+                            elem.updaten = true;
+                            reo(elem);
+                        }
+                    }
+                }
+				*/
 
                 daten.beziehungen.forEach(element => {
+					/*
+					if (element.titel.includes("ütz") && element.gruppe == "Reini-privat") {
+						element.gruppe = "Schützenvorstand";
+						element.updaten = true;
+					}
+					*/
                     element.titel = null;
                     var elemVorhanden = speicherDaten.beziehungen.find(b => b.ID == element.ID);
                     if (!elemVorhanden) {
