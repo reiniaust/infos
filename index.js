@@ -150,7 +150,7 @@ $(document).ready(function() {
         }    
         if ($("#selectAktiveInaktive").val() == "inaktive") {
             aktuelleDaten = aktuelleDaten.filter(b => b.inaktiv == true);
-            auswahlDaten = auswahlDaten.filter(b => b.inaktiv == true);
+            //auswahlDaten = auswahlDaten.filter(b => b.inaktiv == true);
         }    
 
         Globalize.locale("de");
@@ -366,75 +366,79 @@ $(document).ready(function() {
         
         neuAnwenden();
 
-        $.ajax({
-            url: leseUrl + datei,
-            dataType: "json",
-            success: function( speicherDaten, status, xhr ) {
-
-				/*
-                aktuelleDaten.forEach(element => {
-                    reo(element);
-                });
-                function reo(element) {
-                    if (element.oberID) {
-                        var elem = daten.beziehungen.find(b => b.ID == element.oberID)
-                        if (elem) {
-                            elem.gruppe = element.gruppe;
-                            elem.updaten = true;
-                            reo(elem);
-                        }
-                    }
-                    if (element.unterID) {
-                        var elem = daten.beziehungen.find(b => b.ID == element.unterID)
-                        if (elem) {
-                            elem.gruppe = element.gruppe;
-                            elem.updaten = true;
-                            reo(elem);
-                        }
-                    }
-                }
-				*/
-
-                daten.beziehungen.forEach(element => {
-					/*
-					if (element.titel.includes("ütz") && element.gruppe == "Reini-privat") {
-						element.gruppe = "Schützenvorstand";
-						element.updaten = true;
-					}
-					*/
-                    element.titel = null;
-                    var elemVorhanden = speicherDaten.beziehungen.find(b => b.ID == element.ID);
-                    if (!elemVorhanden) {
-                        speicherDaten.beziehungen.push(element);
-                        speicherDaten.protokoll.push(element);
-                    } else {
-                        if (element.updaten) {
-                            element.updaten = null;
-                            var prot = {ID: element.ID};
-                            for (var propName in element) {
-                                if (elemVorhanden[propName] != element[propName]) {
-                                    elemVorhanden[propName] = element[propName];
-                                    prot[propName] = element[propName];
-                                }
+        daten.gruppen.forEach(gruppe => {
+            //var gruppenDaten = speicherDaten.beziehungen.filter(d => d.gruppe == gruppe);
+            datei = "infos-" + gruppe + ".json";
+            $.ajax({
+                url: leseUrl + "&datei=" + datei,
+                dataType: "json",
+                success: function( speicherDaten, status, xhr ) {
+    
+                    /*
+                    aktuelleDaten.forEach(element => {
+                        reo(element);
+                    });
+                    function reo(element) {
+                        if (element.oberID) {
+                            var elem = daten.beziehungen.find(b => b.ID == element.oberID)
+                            if (elem) {
+                                elem.gruppe = element.gruppe;
+                                elem.updaten = true;
+                                reo(elem);
                             }
-                            speicherDaten.protokoll.push(prot);
+                        }
+                        if (element.unterID) {
+                            var elem = daten.beziehungen.find(b => b.ID == element.unterID)
+                            if (elem) {
+                                elem.gruppe = element.gruppe;
+                                elem.updaten = true;
+                                reo(elem);
+                            }
                         }
                     }
-                });
-
-                $.ajax({
-                    url: datenUrl + "daten.php?aktion=speichern",
-                    dataType: "json",
-                    type: "POST",
-                    data: { daten: JSON.stringify(speicherDaten), aktion: aktion },
-                    error: function( xhr, status, error ) {
-                        alert("Fehler beim Speichern");
-                    }
-                });
-            },
-            error: function( xhr, status, error ) {
-                alert("Fehler beim Lesen vor dem Speichern");
-            }
+                    */
+    
+                    daten.beziehungen.forEach(element => {
+                        /*
+                        if (element.titel.includes("ütz") && element.gruppe == "Reini-privat") {
+                            element.gruppe = "Schützenvorstand";
+                            element.updaten = true;
+                        }
+                        */
+                        element.titel = null;
+                        var elemVorhanden = speicherDaten.beziehungen.find(b => b.ID == element.ID);
+                        if (!elemVorhanden) {
+                            speicherDaten.beziehungen.push(element);
+                            speicherDaten.protokoll.push(element);
+                        } else {
+                            if (element.updaten) {
+                                element.updaten = null;
+                                var prot = {ID: element.ID};
+                                for (var propName in element) {
+                                    if (elemVorhanden[propName] != element[propName]) {
+                                        elemVorhanden[propName] = element[propName];
+                                        prot[propName] = element[propName];
+                                    }
+                                }
+                                speicherDaten.protokoll.push(prot);
+                            }
+                        }
+                    });
+    
+                    $.ajax({
+                        url: datenUrl + "daten.php?aktion=speichern",
+                        dataType: "json",
+                        type: "POST",
+                        data: { daten: JSON.stringify(speicherDaten), aktion: aktion, datei: datei },
+                        error: function( xhr, status, error ) {
+                            alert("Fehler beim Speichern");
+                        }
+                    });
+                },
+                error: function( xhr, status, error ) {
+                    alert("Fehler beim Lesen vor dem Speichern");
+                }
+            });
         });
     }
 
