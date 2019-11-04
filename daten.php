@@ -36,7 +36,7 @@
 	}
 
 	if ($_GET["aktion"] == "speichern") {
-		$datei = $ordner . "infos.json";
+		$datei = $ordner . $_POST["datei"];
 	
 		$timestamp = time();
 		if($_POST["aktion"] == "sichern-datum") {
