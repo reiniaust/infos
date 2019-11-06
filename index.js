@@ -40,6 +40,7 @@ $(document).ready(function() {
         neuAnwenden();
     });
 
+    /*
     $("#selectDatei").change(function name() {
         speichen("sichern-datum");
         if ($( "#selectDatei" ).val() == "abmelden") {
@@ -50,6 +51,7 @@ $(document).ready(function() {
         }
         lesen();
     })
+    */
 
     $("#selectGruppe").change(function name() {
         neuAnwenden();
@@ -290,7 +292,7 @@ $(document).ready(function() {
                 }
                 bAlt.datum = new Date().toLocaleString();
                 bAlt.updaten = true;
-                speichen("sichern-datum");
+                speichen();
             },
             onRowRemoved: function(e) {
                 $.ajax({
@@ -366,11 +368,11 @@ $(document).ready(function() {
         
         neuAnwenden();
 
-        daten.gruppen.forEach(gruppe => {
-            //var gruppenDaten = speicherDaten.beziehungen.filter(d => d.gruppe == gruppe);
-            datei = "infos-" + gruppe + ".json";
+        //daten.gruppen.forEach(gruppe => {
+            //datei = "infos-" + gruppe + ".json";
             $.ajax({
-                url: leseUrl + "&datei=" + datei,
+                //url: leseUrl + "&datei=" + datei,
+                url: leseUrl + datei,
                 dataType: "json",
                 success: function( speicherDaten, status, xhr ) {
     
@@ -425,11 +427,14 @@ $(document).ready(function() {
                         }
                     });
     
+                    //speicherDaten.dateien = null;
+
                     $.ajax({
                         url: datenUrl + "daten.php?aktion=speichern",
                         dataType: "json",
                         type: "POST",
-                        data: { daten: JSON.stringify(speicherDaten), aktion: aktion, datei: datei },
+                        //data: { daten: JSON.stringify(speicherDaten), aktion: aktion, datei: datei },
+                        data: { daten: JSON.stringify(speicherDaten), aktion: aktion},
                         error: function( xhr, status, error ) {
                             alert("Fehler beim Speichern");
                         }
@@ -439,7 +444,7 @@ $(document).ready(function() {
                     alert("Fehler beim Lesen vor dem Speichern");
                 }
             });
-        });
+        //});
     }
 
     function editiermodusSetzen () {
@@ -484,10 +489,12 @@ $(document).ready(function() {
         
                 var option = '<option></option>';
                 option += '<option value=abmelden>Abmelden</option>';
+                /*
                 for (var i=0;i<daten.dateien.length;i++){
                     option += '<option value="'+ daten.dateien[i] + '">' + daten.dateien[i] + '</option>';
                 }
                 $('#selectDatei').append(option);
+                */
 
                 option = '';
                 daten.gruppen.forEach(gruppe => {
