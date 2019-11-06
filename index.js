@@ -94,6 +94,7 @@ $(document).ready(function() {
             });*/
                 
             // Änderungsprotokoll
+            /*
             var prot = daten.protokoll.filter(p => p.ID == filterID);
             if (prot.length == 1) {
                 protText = element.datum;             
@@ -118,6 +119,7 @@ $(document).ready(function() {
                     //protText += "\r\n";
                 });
             }
+            */
         } else {
             //aktuelleDaten = daten.beziehungen.filter(b => editiermodus || !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
             aktuelleDaten = daten.beziehungen.filter(b => !daten.beziehungen.find(bo => bo.oberID == b.ID) && !daten.beziehungen.find(bo => bo.unterID == b.ID)); // nur Oberpunkte anzeigen
@@ -130,7 +132,7 @@ $(document).ready(function() {
         }    
         
         $("#divFilterAnzeige").html(filterInhalt);
-        $("#divProtokollAnzeige").html(protText);
+        //$("#divProtokollAnzeige").html(protText);
 
         $("#btnFilterAufheben").click(function() {
             filterID = 0;
@@ -276,7 +278,6 @@ $(document).ready(function() {
                     neu.ID = e.key;
                     daten.beziehungen.push(neu);
                     neu.datum = new Date().toLocaleString();
-                    //daten.protokoll.push(zuletztAngelegt);
                 } else {
                     neu.ID = gefunden.ID;
                 }
@@ -411,7 +412,7 @@ $(document).ready(function() {
                         var elemVorhanden = speicherDaten.beziehungen.find(b => b.ID == element.ID);
                         if (!elemVorhanden) {
                             speicherDaten.beziehungen.push(element);
-                            speicherDaten.protokoll.push(element);
+                            //speicherDaten.protokoll.push(element);
                         } else {
                             if (element.updaten) {
                                 element.updaten = null;
@@ -422,7 +423,7 @@ $(document).ready(function() {
                                         prot[propName] = element[propName];
                                     }
                                 }
-                                speicherDaten.protokoll.push(prot);
+                                //speicherDaten.protokoll.push(prot);
                             }
                         }
                     });
