@@ -14,12 +14,14 @@
 			$ausgabe = fread($fp, filesize($datei)-1);
 			fclose($fp);
 
+			/*
 			$fileList = glob($ordner . "infos-*.json");
 			$ausgabe .= ', "dateien": [';
 			foreach($fileList as $filename){
 				$ausgabe .= '"' . substr($filename, strlen($ordner)) . '",';
 			}
 			$ausgabe = substr($ausgabe, 0, strlen($ausgabe)-1) . "]";
+			*/
 			
 			$ausgabe .= ', "gruppen": [';
 			foreach ($user["gruppen"] as $key => $gruppe) {
@@ -36,7 +38,7 @@
 	}
 
 	if ($_GET["aktion"] == "speichern") {
-		$datei = $ordner . $_POST["datei"];
+		$datei = $ordner . "infos.json";
 	
 		$timestamp = time();
 		if($_POST["aktion"] == "sichern-datum") {
@@ -49,7 +51,13 @@
 		}
 	
 		$fp = fopen($datei , "w");
-		fwrite($fp, $_POST["daten"]);
+		
+		//fwrite($fp, $_POST["daten"]);
+		$pieces = str_split($_POST["daten"], 1024 * 4);
+		foreach ($pieces as $piece) {
+			fwrite($fp, $piece, strlen($piece));
+		}
+		
 		fclose($fp);
 	
 		echo $_POST["daten"];
