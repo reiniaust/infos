@@ -137,8 +137,8 @@ $(document).ready(function() {
             anwenden();
         });        
     
-        //var store = auswahlDaten;
-        auswahlDaten = daten.beziehungen.filter(b => !(b.oberID && b.bezeichnung)).slice(0).sort( vergleichTitel );
+        //auswahlDaten = daten.beziehungen.filter(b => !(b.oberID && b.bezeichnung)).slice(0).sort( vergleichTitel );
+        auswahlDaten = daten.beziehungen.slice(0).sort( vergleichTitel );
 
         selGruppe = $("#selectGruppe").val();
         if (selGruppe != "alleGruppen") {
@@ -427,6 +427,7 @@ $(document).ready(function() {
                         }
                     });
     
+                    speicherDaten.protokoll = null; // temporär wg Dateigröße 6.11.
                     //speicherDaten.dateien = null;
 
                     $.ajax({
