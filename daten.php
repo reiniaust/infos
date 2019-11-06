@@ -52,11 +52,13 @@
 	
 		$fp = fopen($datei , "w");
 		
-		//fwrite($fp, $_POST["daten"]);
+		fwrite($fp, $_POST["daten"]);
+		/*
 		$pieces = str_split($_POST["daten"], 1024 * 4);
 		foreach ($pieces as $piece) {
 			fwrite($fp, $piece, strlen($piece));
 		}
+		*/
 		
 		fclose($fp);
 	
