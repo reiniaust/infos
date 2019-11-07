@@ -13,18 +13,16 @@ $(document).ready(function() {
     var spalte1 = {};
     //var hauptDatei = "?datei=infos.json";
     var gefunden;
-    var username;
-    var passwort;
-    var selGruppe;
     
-    username = localStorage.getItem("infosUsername");
+    var username = localStorage.getItem("infosUsername");
     if (!username) {
         username = "xy";
     }
-    passwort = localStorage.getItem("infosPasswort");
+    var passwort = localStorage.getItem("infosPasswort");
     if (!passwort) {
         passwort = "xy";
     }
+    var selGruppe; // = localStorage.getItem("selGruppe");
 
     var leseUrl;
 
@@ -40,7 +38,6 @@ $(document).ready(function() {
         neuAnwenden();
     });
 
-    /*
     $("#selectDatei").change(function name() {
         speichen("sichern-datum");
         if ($( "#selectDatei" ).val() == "abmelden") {
@@ -51,7 +48,6 @@ $(document).ready(function() {
         }
         lesen();
     })
-    */
 
     $("#selectGruppe").change(function name() {
         neuAnwenden();
@@ -93,6 +89,7 @@ $(document).ready(function() {
                 }
             });*/
                 
+            protText = element.datum;
             // Änderungsprotokoll
             /*
             var prot = daten.protokoll.filter(p => p.ID == filterID);
@@ -132,7 +129,7 @@ $(document).ready(function() {
         }    
         
         $("#divFilterAnzeige").html(filterInhalt);
-        //$("#divProtokollAnzeige").html(protText);
+        $("#divProtokollAnzeige").html(protText);
 
         $("#btnFilterAufheben").click(function() {
             filterID = 0;
@@ -143,7 +140,14 @@ $(document).ready(function() {
         auswahlDaten = daten.beziehungen.slice(0).sort( vergleichTitel );
 
         selGruppe = $("#selectGruppe").val();
-        if (selGruppe != "alleGruppen") {
+        //localStorage.setItem("selGruppe", selGruppe);
+        if (selGruppe == "alleGruppen") {
+            var dat = [];
+            daten.gruppen.forEach(g => {
+                dat = dat.concat(aktuelleDaten.filter(b => b.gruppe == g));
+            });
+            aktuelleDaten = dat;
+        } else {
             aktuelleDaten = aktuelleDaten.filter(b => b.gruppe == selGruppe);
             //auswahlDaten = auswahlDaten.filter(b => b.gruppe == selGruppe);
         }
@@ -495,15 +499,18 @@ $(document).ready(function() {
                 for (var i=0;i<daten.dateien.length;i++){
                     option += '<option value="'+ daten.dateien[i] + '">' + daten.dateien[i] + '</option>';
                 }
-                $('#selectDatei').append(option);
                 */
+                $('#selectDatei').append(option);
 
-                option = '';
+                option = '<option value="alleGruppen"></option>';
                 daten.gruppen.forEach(gruppe => {
                     option += '<option value="'+ gruppe + '">' + gruppe + '</option>';
                 });
                 $('#selectGruppe').append(option);
-                $('#selectGruppe').val(daten.gruppen[0]);
+                //$('#selectGruppe').val(daten.gruppen[0]);
+                $('#selectGruppe').val("alleGruppen");
+                //$('#selectGruppe').text(selGruppe);
+                //$("#selectGruppe option[value='" + selGruppe + "']").attr('selected',true).text(selGruppe);
         
                 filterID = 0;
     
